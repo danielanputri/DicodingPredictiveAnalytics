@@ -177,12 +177,12 @@ Metrik evaluasi yang digunakan diantara lain:
 
 
 
-![Train Test For Every Model]()
+![Train Test For Every Model](https://github.com/danielanputri/DicodingPredictiveAnalytics/blob/main/images/result.png)
 
 **Model Terbaik** 
 
 Berdasarkan hasil evaluasi, model Random Forest dipilih sebagai model terbaik karena memiliki nilai yang terbaik. Berikut adalah grafik untuk nilai aktual vs nilai prediksi menggunakan model random forest yang telah ditunning.
-![Actual vs Predicted for model RF]()
+![Actual vs Predicted for model RF](https://github.com/danielanputri/DicodingPredictiveAnalytics/blob/main/images/actual%20vs%20predict.png)
 
 **Evaluasi Terhadap Business Understanding**
 - Menjawab Problem Statement: Model yang dibuat berhasil menjawab problem statement dengan memprediksi harga sewa apartemen berdasarkan fitur-fitur yang ada dan mengidentifikasi fitur-fitur yang paling berpengaruh.
