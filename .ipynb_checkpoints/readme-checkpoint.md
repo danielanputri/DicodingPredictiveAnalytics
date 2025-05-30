@@ -31,23 +31,32 @@ Untuk mencapai tujuan yang telah ditetapkan, berikut adalah solusi yang akan dit
 
 ---
 ## Data Understanding
-Dataset yang digunakan berasal dari [Kaggle](https://www.kaggle.com/datasets/manjitbaishya001/house-prices-2023). Dataset ini berisi informasi tentang rumah yang disewakan atau dijual di pakistan pada tahun 2023, termasuk fitur-fitur seperti jumlah kamar mandi, kamar tidur, luas apartemen, dan harga.
+Dataset yang digunakan berasal dari [Kaggle](https://https://www.kaggle.com/datasets/mssmartypants/paris-housing-price-prediction). Dataset ini berisi informasi tentang rumah yang disewakan atau dijual di Paris, termasuk fitur-fitur seperti jumlah kamar mandi, kamar tidur, luas apartemen, dan harga.
 
-Dataset ini terdiri dari 99499 sampel dengan 9 fitur dan 1 target, yang mencakup berbagai aspek dari perumahan di Pakistan.
+Dataset ini terdiri dari 10000 sampel dengan 16 fitur dan 1 target, yang mencakup berbagai aspek dari perumahan di Paris.
 
 ### Variabel-variabel pada Chicago Housing Dataset adalah sebagai berikut:
 
-| **Fitur** | **Deskripsi** |
-|:-------:|:-----------:|
-| Unnamed: 0 | Kemungkinan adalah indeks atau ID unik yang diberikan untuk setiap baris atau entri properti dalam dataset. |
-| property_type | Jenis properti yang dijual atau disewakan. |
-| price | Harga properti yang ditawarkan. - **Target Variable** |
-| location | Detail lokasi spesifik atau nama area/sektor dari properti tersebut di dalam kota |
-| city | Nama kota tempat properti itu berada. |
-| baths |Jumlah kamar mandi yang ada di properti tersebut. |
-| purpose | Tujuan dari iklan properti tersebut. |
-| bedrooms | Jumlah kamar tidur yang tersedia di properti. |
-| Area_in_Marla | Luas properti yang diukur dalam satuan Marla. |
+|      **Fitur**      |                              **Deskripsi**                             |
+| :-----------------: | :--------------------------------------------------------------------: |
+|    `squareMeters`   |                Luas bangunan rumah dalam meter persegi.                |
+|   `numberOfRooms`   |      Jumlah total ruangan (termasuk kamar tidur, ruang tamu, dll).     |
+|      `hasYard`      |           Apakah rumah memiliki halaman (1 = ya, 0 = tidak).           |
+|      `hasPool`      |         Apakah rumah memiliki kolam renang (1 = ya, 0 = tidak).        |
+|       `floors`      |                        Jumlah lantai pada rumah.                       |
+|      `cityCode`     |       Kode numerik untuk menunjukkan wilayah administratif/kota.       |
+|   `cityPartRange`   | Rentang lokasi rumah dalam bagian kota (misalnya, pusat vs pinggiran). |
+|   `numPrevOwners`   |             Jumlah pemilik sebelumnya dari rumah tersebut.             |
+|        `made`       |                     Tahun rumah tersebut dibangun.                     |
+|     `isNewBuilt`    |        Apakah rumah merupakan bangunan baru (1 = ya, 0 = tidak).       |
+| `hasStormProtector` |       Apakah rumah memiliki pelindung badai (1 = ya, 0 = tidak).       |
+|      `basement`     |      Apakah rumah memiliki ruang bawah tanah (1 = ya, 0 = tidak).      |
+|       `attic`       |            Apakah rumah memiliki loteng (1 = ya, 0 = tidak).           |
+|       `garage`      |            Apakah rumah memiliki garasi (1 = ya, 0 = tidak).           |
+|   `hasStorageRoom`  |  Apakah rumah memiliki ruang penyimpanan tambahan (1 = ya, 0 = tidak). |
+|    `hasGuestRoom`   |          Apakah rumah memiliki kamar tamu (1 = ya, 0 = tidak).         |
+|       `price`       |     Harga rumah dalam satuan mata uang tertentu (target variabel).     |
+
 
 ---
 ## Eksplorasi Data Awal (EDA)
@@ -55,36 +64,32 @@ Untuk memahami dataset dengan lebih baik, beberapa tahapan eksplorasi data telah
 
 #### 1. Statistik Deskriptif
 Statistik deskriptif menunjukkan bahwa:
-- Harga (price) memiliki Median 7.500.000 dan Rata-rata 10.375.920
-- Jumlah kamar mandi (baths) memiliki Median 3 Rata-rata 3,53
-- Jumlah kamar tidur (bedrooms) memiliki Median 3 dan Rata-rata 3,35
-- Luas properti (Area_in_Marla) memiliki Median 6,7 Marla dan Rata-rata 8,76 Marla
+- Harga rumah (price) memiliki median 5.016.180 dan rata-rata 4.993.448, menunjukkan distribusi harga yang hampir simetris.
+- Luas rumah (squareMeters) memiliki median 50.105,5 m² dan rata-rata 49.870,13 m², menunjukkan penyebaran data cukup merata di sekitar nilai tengah.
+- Jumlah kamar (numberOfRooms) memiliki median 50 dan rata-rata 50,36, dengan rentang nilai antara 1 hingga 100 kamar, yang cukup luas.
+- Fitur biner seperti hasYard, hasPool, dan isNewBuilt memiliki nilai median 0, menunjukkan bahwa sebagian besar rumah tidak memiliki fitur-fitur ini.
+- Tahun pembangunan (made) memiliki median 2005,5 dan rata-rata 2005,49, menunjukkan bahwa sebagian besar rumah dibangun sekitar awal 2000-an.
 
 #### 2. Analisis Missing Values
 Dataset ini tidak memiliki missing values.
 
 #### 3. Distribusi Target Variable
-Distribusi harga rumah (price) menunjukkan distribusi yang positively skewed, dengan Sebagian besar data berada di sisi harga rendah, Ekor distribusi menjulur panjang ke arah kanan (harga tinggi), serta Rata-rata (mean) lebih besar dari median (terlihat dari garis merah di kanan garis hijau). Hal ini mengindikasikan bahwa harga rumah di Pakistan tidak terdistribusi secara normal, dengan sebagian besar rumah memiliki harga di kisaran menengah, dan sebagian kecil dengan harga sangat tinggi.
-
-#### 4. Cek Outliers dan Menangani Outliers
-Terdapat outliers dalam fitur price, Area_in_Marla, baths, dan bathroom. Outliers ditangani dengan cara dihapus menggunakan IQR Method.
+Distribusi harga rumah (price) menunjukkan distribusi yang normal.
 
 #### 4. Analisis Korelasi
 Matriks korelasi menunjukkan:
-- Baths (Kamar Mandi) memiliki korelasi positif tertinggi dengan harga rumah (r = 0.53)
-- Fitur Area_in_Marla (luas bangunan) memiliki hubungan yang cukup kuat dengan baths dan bedrooms, yang menunjukkan bahwa luas bangunan adalah indikator penting dari ukuran dan fasilitas apartemen.
+- squareMeters (luas rumah) memiliki korelasi positif tertinggi dan sangat kuat dengan harga rumah (r = 1.00), menjadikannya fitur paling signifikan untuk prediksi.
+- Fitur-fitur lain seperti numberOfRooms, hasYard, hasPool, floors, dan garage memiliki korelasi sangat lemah atau mendekati nol terhadap harga, sehingga pengaruhnya terhadap prediksi sangat kecil dalam model linier.
+- Tidak ditemukan hubungan kuat antar fitur lainnya, yang menunjukkan tidak ada multikolinearitas berarti.
+- Fitur seperti cityCode dan cityPartRange memiliki korelasi rendah, namun bisa memiliki makna non-linear jika dikombinasikan dengan model machine learning berbasis pohon.
 
 ---
 ## Data Preparation
 Beberapa teknik data preparation yang diterapkan dalam proyek ini:
 
-1. **Menghapus Fitur yang Tidak Diperlukan**
-   Fitur yang tidak diperlukan (Unnamed:0) dihapus karena fitur ini tidak memiliki pengaruh terhadap pembuatan model.
-2. **Encoding Categorical Variables**
-   Mengubah variabel kategorikal menjadi variabel numerik menggunakan teknik frequency encoding, one-hot encoding, dan label encoding.
-3. **Pembagian Data (Train-Test Split)**
+1. **Pembagian Data (Train-Test Split)**
    Data dibagi menjadi set pelatihan (80%) dan pengujian (20%) untuk mengevaluasi performa model pada data yang tidak pernah dilihat sebelumnya. Proses ini penting untuk menghindari overfitting dan mendapatkan estimasi yang tidak bias tentang performa model.
-4. **Standardisasi Fitur**
+2. **Standardisasi Fitur**
    Semua fitur numerik distandardisasi menggunakan StandardScaler untuk memastikan semua fitur berada dalam skala yang sama. Tanpa standardisasi, fitur dengan skala yang lebih besar akan mendominasi proses pembelajaran model.
    
 ---
@@ -164,16 +169,17 @@ Metrik evaluasi yang digunakan diantara lain:
 
 ### Hasil Evaluasi Final
 
-| **Hasil** | **KNN** | **RF** | **Boosting** | **RF Setelah Tuning** |
-|:------------------------|:----------------|:-------------:|:-------------:| :-------------:|
-| train_mse |  9.788781e+12 |  5.890061e+12 | 2.178827e+13 | 7.702493e+12 |
-| train_rmse | 3.128703e+06 |  2.426945e+06 |  4.667791e+06 | 2.775337e+06 |
-| train_mae |   1.808073e+06 |  1.432871e+06 |  3.082030e+06 | 1.675942e+06 |
-| train_r2 |    8.755708e-01 |  9.251290e-01 |  7.230403e-01 | 9.020904e-01 |
-| test_mse |   1.202162e+13 |  9.391332e+12 | 2.101028e+13 | 9.354967e+12 |
-| test_rmse |   3.467221e+06 |  3.064528e+06 | 4.583697e+06 | 3.058589e+06 |
-| test_mae |    1.994047e+06 |  1.769583e+06 | 3.025828e+06 | 1.840509e+06 |
-| test_r2 |    8.474768e-01 |  8.808483e-01  | 7.334340e-01 | 8.813097e-01 |
+| **Hasil**       | **KNN**         | **RF**           | **Boosting**     | **RF Setelah Tuning** |
+|-----------------|-----------------|------------------|------------------|------------------------|
+| train_mse       | 1.209576e+12     | 2.101126e+06      | 1.277552e+11      | 3.384314e+10           |
+| train_rmse      | 1.099807e+06     | 1.449526e+03      | 3.574285e+05      | 1.839651e+05           |
+| train_mae       | 9.056725e+05     | 1.152520e+03      | 3.099350e+05      | 1.355925e+05           |
+| train_r2        | 8.516664e-01     | 9.999997e-01      | 9.843330e-01      | 9.958497e-01           |
+| test_mse        | 1.718531e+12     | 3.239738e+10      | 1.542182e+11      | 1.560090e+11           |
+| test_rmse       | 1.310928e+06     | 1.799927e+05      | 3.927063e+05      | 3.949797e+05           |
+| test_mae        | 1.086788e+06     | 1.502514e+05      | 3.299662e+05      | 3.120134e+05           |
+| test_r2         | 8.037928e-01     | 9.963011e-01      | 9.823927e-01      | 9.821882e-01           |
+
 
 
 
@@ -188,6 +194,7 @@ Berdasarkan hasil evaluasi, model Random Forest dipilih sebagai model terbaik ka
 - Menjawab Problem Statement: Model yang dibuat berhasil menjawab problem statement dengan memprediksi harga sewa apartemen berdasarkan fitur-fitur yang ada dan mengidentifikasi fitur-fitur yang paling berpengaruh.
 - Mencapai Goals: Model Random Forest dengan hyperparameter yang dioptimalkan berhasil mencapai tujuan untuk memberikan prediksi harga sewa yang akurat dan mengidentifikasi fitur penting.
 - Dampak dari Solution Statement: Penggunaan beberapa algoritma dan hyperparameter tuning memberikan dampak positif dengan meningkatkan akurasi prediksi dan memungkinkan pemilihan model terbaik. Solusi yang direncanakan memberikan hasil yang signifikan dalam mencapai tujuan proyek.
+
 ---
 ## Kesimpulan
 
