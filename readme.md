@@ -104,6 +104,16 @@ Algoritma KNN mencari tetangga terdekat untuk melakukan prediksi berdasarkan rat
 - KNN tidak membuat asumsi apa pun tentang distribusi data yang mendasarinya. Ini membuatnya fleksibel dan dapat bekerja dengan baik pada data dengan struktur yang kompleks.
 - KNN mengklasifikasikan atau memprediksi titik data baru berdasarkan mayoritas kelas atau rata-rata nilai dari 'k' tetangga terdekatnya, yang diukur menggunakan metrik jarak (seperti Euclidean, Manhattan, dll.).
 
+**Kelebihan**:
+- Sederhana dan Mudah Diimplementasikan: Konsep dasarnya intuitif, membuatnya mudah dipahami dan diimplementasikan tanpa memerlukan asumsi yang kompleks mengenai distribusi data.
+- Adaptif terhadap Data Lokal: KNN dapat beradaptasi dengan baik terhadap pola lokal dalam data karena prediksi didasarkan pada titik data terdekat, yang bisa menangkap nuansa spesifik di area tertentu di Paris.
+- Tidak Memerlukan Tahap Pelatihan Eksplisit: KNN menyimpan seluruh dataset sebagai modelnya, sehingga tidak ada waktu yang signifikan untuk "melatih" model secara tradisional.
+
+**Kekurangan**:
+- Sensitif terhadap Skala Fitur: Performa KNN sangat dipengaruhi oleh skala variabel. Fitur dengan rentang nilai yang besar dapat mendominasi perhitungan jarak, sehingga normalisasi fitur menjadi penting.
+- Biaya Komputasi Tinggi saat Prediksi: Untuk setiap prediksi baru, KNN harus menghitung jarak ke semua titik data dalam dataset pelatihan, yang bisa menjadi lambat untuk dataset besar.
+- Kesulitan dengan Data Dimensi Tinggi (Curse of Dimensionality): Efektivitas KNN menurun seiring bertambahnya jumlah fitur, karena konsep "kedekatan" menjadi kurang bermakna di ruang dimensi tinggi.
+
 **Parameter yang digunakan**:
 - n_neighbors=10
 
@@ -115,12 +125,25 @@ Random Forest adalah algoritma ensemble yang menggunakan multiple decision trees
 - Setiap pohon dilatih pada sampel data acak (bootstrap sample) dari dataset asli, dan pada setiap pemisahan (split) di pohon, hanya subset acak dari fitur yang dipertimbangkan.
 - Dengan menggabungkan prediksi dari banyak pohon yang beragam (hasil dari pengambilan sampel acak), Random Forest cenderung mengurangi overfitting yang sering terjadi pada satu decision tree dan meningkatkan akurasi prediksi.
 
+**Kelebihan**:
+- Akurasi Tinggi dan Mampu Menangani Data Kompleks: Umumnya memberikan hasil prediksi yang sangat baik dan mampu menangkap hubungan non-linear dalam data harga rumah yang kompleks di Paris.
+- Tahan terhadap Overfitting: Dengan membangun banyak pohon dari subset data dan fitur yang berbeda, Random Forest mengurangi risiko overfitting yang sering terjadi pada single decision tree.
+- Mampu Menangani Fitur Kategorikal dan Numerik Secara Bersamaan: Tidak memerlukan penskalaan fitur secara ekstensif dan dapat menangani berbagai tipe data secara alami.
+
+**Kekurangan**:
+- Kurang Intuitif (Black Box): Meskipun hasilnya akurat, proses pengambilan keputusan internalnya lebih sulit untuk diinterpretasikan dibandingkan single decision tree atau model linear.
+- Membutuhkan Lebih Banyak Sumber Daya Komputasi: Pelatihan banyak pohon memerlukan waktu dan memori yang lebih besar, terutama untuk dataset yang sangat besar.
+- Cenderung Bias terhadap Fitur dengan Banyak Level (untuk Fitur Kategorikal): Dalam beberapa implementasi, fitur kategorikal dengan jumlah level yang lebih banyak bisa mendapatkan bobot yang lebih tinggi secara tidak proporsional.
+
 **Parameter yang digunakan**:
 - `n_estimators=100`: Jumlah decision tree dalam forest.
+- `max_depth=16` : Kedalaman maksimum setiap pohon dalam hutan.
 - `random_state=42`: Untuk memastikan reprodusibilitas hasil.
+- `n_jobs=-1` : Jumlah core CPU yang digunakan untuk pelatihan. -1 berarti menggunakan semua core yang tersedia untuk mempercepat proses training.
+
 
 **Proses hyperparameter tuning**:
-Setelah evaluasi model awal, Random Forest dipilih untuk tuning karena menunjukkan performa terbaik. Tuning dilakukan menggunakan GridSearchCV dengan 5-fold cross-validation untuk mengevaluasi kombinasi parameter berikut:
+Setelah evaluasi model awal, Random Forest dipilih untuk tuning karena menunjukkan performa terbaik. Tuning dilakukan menggunakan RandomizedSearchCV dengan 3-fold cross-validation untuk mengevaluasi kombinasi parameter berikut:
 - `n_estimators`: [50, 300] - Jumlah tree dalam forest
 - `max_depth`: [5, 30] - Kedalaman maksimum setiap tree
 - `min_samples_split`: [2, 10] - Minimum sampel yang diperlukan untuk split node
@@ -134,12 +157,24 @@ Setelah evaluasi model awal, Random Forest dipilih untuk tuning karena menunjukk
 - `min_samples_split=2`: Nilai default yang memungkinkan splitting node dengan minimal 2 sampel.
 - `n_estimators=276`: Jumlah tree yang lebih banyak untuk meningkatkan stabilitas prediksi.
 
+Alasan pemilihan parameter ini: Parameter-parameter tersebut menghasilkan RMSE terendah pada cross-validation, menunjukkan kemampuan generalisasi terbaik. Peningkatan jumlah estimator menjadi 276 memungkinkan model untuk lebih baik menangkap pola dalam data, sementara max_depth=26 memberikan fleksibilitas yang cukup tanpa overfitting berlebihan.
+
 ### 3. Gradient Boosting
 Gradient Boosting adalah algoritma ensemble yang membangun model secara sequential.
 
 **Karakteristik**:
 - Gradient Boosting membangun model satu per satu secara berurutan. Setiap model baru dilatih untuk memperbaiki kesalahan (residual) dari model-model sebelumnya. Ini berbeda dengan metode ensemble lain seperti Random Forest yang membangun model secara paralel
 - Gradient Boosting membangun model secara bertahap (iteratif). Setiap model baru yang ditambahkan bertujuan untuk memperbaiki kesalahan (residual) yang dibuat oleh model-model sebelumnya. Ini berbeda dengan algoritma seperti Random Forest yang membangun model secara paralel.
+
+**Kelebihan**:
+- Performa Prediktif Sangat Tinggi: Seringkali menjadi salah satu algoritma dengan performa terbaik untuk data terstruktur, mampu menghasilkan akurasi prediksi harga rumah yang sangat tinggi.
+- Fleksibilitas Tinggi: Dapat dioptimalkan dengan berbagai fungsi loss dan memungkinkan kustomisasi yang mendalam untuk berbagai jenis masalah prediksi.
+- Mampu Menangani Data yang Hilang Secara Internal: Beberapa implementasi Gradient Boosting memiliki mekanisme internal untuk menangani nilai yang hilang dalam dataset.
+
+**Kekurangan**:
+- Sensitif terhadap Hiperparameter: Memerlukan tuning hiperparameter yang cermat; pengaturan yang buruk dapat dengan mudah menyebabkan overfitting.
+- Waktu Pelatihan yang Lebih Lama: Proses pelatihan yang bersifat sekuensial (model baru dibangun berdasarkan model sebelumnya) dapat memakan waktu lebih lama dibandingkan Random Forest, terutama pada dataset besar.
+- Rentan terhadap Overfitting jika Tidak Diatur dengan Baik: Meskipun kuat, jika jumlah pohon terlalu banyak atau learning rate terlalu tinggi tanpa regularisasi yang tepat, model bisa overfit terhadap data pelatihan.
 
 **Parameter yang digunakan**:
 - `learning_rate=0.05`
